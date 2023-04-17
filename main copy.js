@@ -33,7 +33,6 @@ const generateHint = (guess) =>  {
   let guessArray = guess.split('')
   let correctLetterLocations = 0
   let correctLetters = 0
-  let hint = generateHint(guess).push(guess, hint)
 
   for (let i = 0; i < solutionArray.length; i++) {
     if(solutionArray[i] === guessArray[i]) {
@@ -41,25 +40,23 @@ const generateHint = (guess) =>  {
       solutionArray[i] = null
     }
   }
-  let targetIndex = guessArray.indexOf(solutionArray[i])
+  let targetIndex = guessArray.indexOf(solution[i])
   for (let i = 0; i < solutionArray.length; i++) {
-    guessArray.indexOf(solutionArray[i])
+    guessArray.indexOf(solution[i])
     if(targetIndex > -1) {
       correctLetters++;
       solutionArray[i] = null
-    } generateHint(hint)
-    
+    }
 }
 const mastermind = (guess) => {
-  // solution = 'abcd'; // Comment this out to generate a random solution
+  solution = 'abcd'; // Comment this out to generate a random solution
   if(guess === solution) {
     return 'You guessed it!'
   }
+
   generateHint(guess)
-  if(board.length < 10) {
-  return 'You ran out of turns! The solution was ${solution}'
-} else return 'Guess again.'
 }
+
 
 const getPrompt = () =>  {
   rl.question('guess: ', (guess) => {
