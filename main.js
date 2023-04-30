@@ -10,62 +10,71 @@ const rl = readline.createInterface({
 let board = [];
 let solution = '';
 let letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+let attempts = 0;
+const ceiling = 10;
 
 const printBoard = () =>  {
   for (let i = 0; i < board.length; i++) {
-    console.log(board[i]);
+    console.log(board[i])
   }
 }
 
 const generateSolution = () =>  {
   for (let i = 0; i < 4; i++) {
-    const randomIndex = getRandomInt(0, letters.length);
-    solution += letters[randomIndex];
+    const randomIndex = getRandomInt(0, letters.length)
+    solution += letters[randomIndex]
   }
 }
 
 const getRandomInt = (min, max) => {
-  return Math.floor(Math.random() * (max - min)) + min;
+  return Math.floor(Math.random() * (max - min)) + min
 }
 
 const generateHint = (guess) =>  {
-  let solutionArray = solution.split('')
-  let guessArray = guess.split('')
-  let correctLetterLocations = 0
-  let correctLetters = 0
-  let hint = generateHint(guess).push(guess, hint)
+  let solutionArray = solution.split('');
+  let guessArray = guess.split('');
+  let correctLetterLocations = 0;
+  let correctLetters = 0;
 
   for (let i = 0; i < solutionArray.length; i++) {
-    if(solutionArray[i] === guessArray[i]) {
-      correctLetterLocations++
-      solutionArray[i] = null
+    if (solutionArray[i] === guessArray[i]) {
+      correctLetterLocations++;
+      solutionArray[i] = null;
     }
   }
-  let targetIndex = guessArray.indexOf(solutionArray[i])
+
   for (let i = 0; i < solutionArray.length; i++) {
-    guessArray.indexOf(solutionArray[i])
-    if(targetIndex > -1) {
+    if (solutionArray[i] !== null && guessArray.includes(solutionArray[i])) {
       correctLetters++;
-      solutionArray[i] = null
-    } generateHint(hint)
-    
+      solutionArray[i] = null;
+    }
+  } return `${correctLetterLocations}-${correctLetters}`;
 }
+
 const mastermind = (guess) => {
-  // solution = 'abcd'; // Comment this out to generate a random solution
-  if(guess === solution) {
-    return 'You guessed it!'
+  if (guess === solution) {
+    return 'You guessed it!';
+  } else {
+    let hint = generateHint(guess);
+    board.push(`${guess}-${hint}`);
+    attempts++;
+    if (attempts === ceiling) {
+      return `You ran out of turns! The solution was ${solution}.`;
+    } else {
+      return 'Guess again.';
+    }
   }
-  generateHint(guess)
-  if(board.length < 10) {
-  return 'You ran out of turns! The solution was ${solution}'
-} else return 'Guess again.'
 }
 
 const getPrompt = () =>  {
   rl.question('guess: ', (guess) => {
     mastermind(guess);
     printBoard();
-    getPrompt();
+    if (attempts === ceiling || solution === guess) {
+      rl.close();
+    } else {
+      getPrompt();
+    }
   });
 }
 
@@ -90,11 +99,9 @@ if (typeof describe === 'function') {
     it('should generate hints if solution has duplicates', () => {
       assert.equal(generateHint('aabb'), '1-1');
     });
-
   });
 
-} else
-
+} else {
   generateSolution();
   getPrompt()
 }
